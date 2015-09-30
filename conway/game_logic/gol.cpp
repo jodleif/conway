@@ -1,5 +1,6 @@
 #include "gol.h"
 #include <cassert>
+#include <iostream>
 
 conway::rule_neighbor_state conway::get_state(int nof)
 {
@@ -54,6 +55,7 @@ bool conway::game_of_life::cell_change_rule(rule_neighbor_state ruling, bool cur
 	case rule_neighbor_state::more_than_three:
 		return false;
 	default:
+		std::cerr << "[cell_change_rule] ERROR: Got invalid game_rule\n";
 		return false;
 	}
 }
@@ -78,7 +80,7 @@ void conway::game_of_life::update()
 	for (int i{ 0 };i < _height;++i) {
 		for (int j{ 0 };j < _width;++j) {
 			auto next_state_ji = get_neighborstate(j, i);
-			next_gen[coord_to_pos(j, i)] = cell_change_rule(next_state_ji);
+			next_gen[coord_to_pos(j, i)] = cell_change_rule(next_state_ji, alive(j,i));
 		}
 	}
 	_game_board = next_gen;
