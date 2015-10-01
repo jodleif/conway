@@ -1,7 +1,8 @@
 #include <iostream>
 
-int main()
-{
-	std::cout << "Conway's Game of Life - Logic\n";
-	return 0;
+using namespace std;
+
+int main() {
+    cout << "Hello, World!" << endl;
+    return 0;
 }
