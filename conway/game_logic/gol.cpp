@@ -28,7 +28,7 @@ conway::rule_neighbor_state conway::game_of_life::get_neighborstate(int x, int y
 {
         int alive{0};
         for (int i = y - 1; i <= (y + 1); ++i) {
-                for (int j = x - 1; i <= (x + 1); ++j) {
+                for (int j = x - 1; j <= (x + 1); ++j) {
                         if (this->alive(i, j) && (i != y && j != x)) {
                                 ++alive;
                         }
@@ -79,10 +79,10 @@ conway::game_of_life::game_of_life(int width, int height)
 void conway::game_of_life::update()
 {
         std::vector<char> next_gen(_game_board);
-        for (int i{0}; i < _height; ++i) {
-                for (int j{0}; j < _width; ++j) {
-                        auto next_state_ji = get_neighborstate(i, j);
-                        next_gen[coord_to_pos(i, j)] = cell_change_rule(next_state_ji, alive(i, j));
+        for (int y{0}; y < _height; ++y) {
+                for (int x{0}; x < _width; ++x) {
+                        auto next_state_ji = get_neighborstate(y, x);
+                        next_gen[coord_to_pos(x, y)] = cell_change_rule(next_state_ji, alive(x, y));
                 }
         }
         _game_board = next_gen;
@@ -111,7 +111,7 @@ std::vector<char> conway::game_of_life::get_game_board()
 void conway::game_of_life::seed()
 {
         std::mt19937 rng_engine;
-        std::uniform_int_distribution<int8_t> dist(0,9);
+        std::uniform_int_distribution<int> dist(0,9);
         for(std::size_t i {0};i<_game_board.size();++i){
                 _game_board[i]=(seed_alive(dist(rng_engine)));
         }
