@@ -131,40 +131,37 @@ char ::console::debug_stuff::get_char_based_on_pos(int x, int y, int max_x, int 
         }
 }
 
-void console::frame::fill_window(const std::vector<char> &to_draw)
+void console::frame::fill_window(const std::vector<char> &bitvector)
 {
-        if (to_draw.size() != static_cast<std::size_t>(_height * _width)) {
-                std::cerr << "[frame::fill_window] ERROR: Invalid length of vector to draw got:" << to_draw.size() <<
+        if (bitvector.size() != static_cast<std::size_t>(_height * _width)) {
+                std::cerr << "[frame::fill_window] ERROR: Invalid length of vector to draw got:" << bitvector.size() <<
                 " wanted " << (_height * _width) << "\n";
                 return;
         }
 
-
+        move(0,0);
         for (int y{0}; y < _height; ++y) {
                 for (int x{0}; x < _width; ++x) {
-                        auto ch = char_to_draw(to_draw[x * y + x]); // <-- to draw.
-                        mvwaddch(_window, y, x, ch);
+                        auto ch = to_draw(bitvector[x * y + x]); // <-- to draw.
+                        move(y,x-1);
+                        wattron(_window,COLOR_PAIR(ch.first));
+                        mvwprintw(_window,y,x, "%c",ch.second);//    A
+                        wattroff(_window,COLOR_PAIR(ch.first));
+                        //                    mvwaddch(_window, y, x, ch.second);
                 }
         }
+
 }
 
-char console::frame::char_to_draw(char ch)
+std::pair<short, char> console::frame::to_draw(char ch)
 {
         switch(ch){
                 case 0:
-                        return 'X';
+                        return {1,'X'};
                 case 1:
-                        return 'O';
+                        return {2,'O'}; //COLOR green (see screen.cpp)
                 default:
-                        return 'E';
+                        return {0,'E'};
         }
 }
 
-void console::frame::clr()
-{
-        for(int y{0};y<_height;++y){
-                for(int x{0};x<_width;++x){
-                        mvwdelch(_window,y,x);
-                }
-        }
-}

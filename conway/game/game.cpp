@@ -33,11 +33,6 @@ void conway::game::run()
 void conway::game::to_loop(game_of_life *_gol, frame *_frame)
 {
         (*_frame).fill_window((*_gol).get_game_board());
-        //(*_frame).fill_window_debug();
         (*_frame).refresh();
-        //_frame.clr();
-        //_frame.fill_window(_gol.get_game_board());
-        //_frame.refresh();
-        //_gol->print_gameboard();
         _gol->update();
 }

@@ -6,9 +6,10 @@
 #define CONWAY_FRAME_H
 #include <cstdint>
 #include <vector>
-#include <functional>
-#include "ncurses.h"
+#include <utility>
+#include <curses.h>
 #include "character.h"
+
 namespace console {
         class frame {
         private:
@@ -23,20 +24,19 @@ namespace console {
                 WINDOW *_super = nullptr; // not owning pointer.
 
                 bool _has_super = false;
-                char char_to_draw(char ch);
+                std::pair<short,char> to_draw(char ch);
         public:
                 frame(int nr_rows, int nr_cols, int row_0, int col_0);
                 frame(frame &sw, int nr_rows, int nr_cols, int row_0, int col_0);
                 ~frame();
 
                 void fill_window_debug();
-                void fill_window(const std::vector<char>& to_draw);
+                void fill_window(const std::vector<char> &bitvector);
                 void add(character &x);
                 void erase(character &x);
                 void center(character &x);
                 void refresh();
                 void move(int col, int row);
-                void clr();
 
                 WINDOW* get_window();
                 WINDOW* get_super();

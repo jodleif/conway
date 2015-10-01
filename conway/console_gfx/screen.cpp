@@ -8,11 +8,15 @@ namespace console {
         {
                 initscr();
                 clear();
+                start_color();
                 noecho();
                 cbreak();
                 keypad(stdscr, 1);
                 curs_set(0);
                 getmaxyx(stdscr, _height, _width);
+                // Colors
+                init_pair(1,COLOR_RED,COLOR_BLACK);
+                init_pair(2,COLOR_GREEN,COLOR_BLACK);
         }
 
         // Clear ncurses
