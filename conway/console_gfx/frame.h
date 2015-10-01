@@ -6,16 +6,21 @@
 #define CONWAY_FRAME_H
 #include <cstdint>
 #include "ncurses.h"
+#include "character.h"
 namespace console {
         class frame {
         private:
-                std::size_t _height;
-                std::size_t _width;
+                int _height;
+                int _width;
 
+                // Position of frame
+                int _row_pos;
+                int _col_pos;
                 // Owning pointer?
-                WINDOW *_w;
+                WINDOW *_window;
                 // not owning pointer... use boost::optional?
-                WINDOW *_super;
+                WINDOW *_super = nullptr;
+                bool _has_super = false;
         public:
                 frame(int nr_rows, int nr_cols, int row_0, int col_0);
 
@@ -26,6 +31,7 @@ namespace console {
 
                 void add(character &x);
                 void center(character &x);
+                WINDOW* get_window();
         };
 }
 
