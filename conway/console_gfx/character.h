@@ -7,6 +7,7 @@
 
 namespace console {
         // Inane data structure for a character in x,y space
+        // PERHAPS: replace with struct.
         class character {
         private:
                 int _row;

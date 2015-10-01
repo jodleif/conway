@@ -33,7 +33,7 @@ conway::rule_neighbor_state conway::game_of_life::get_neighborstate(int x, int y
                         }
                 }
         }
-        return conway::rule_neighbor_state(alive);
+        return conway::get_state(alive);
 }
 
 std::size_t conway::game_of_life::coord_to_pos(int x, int y)
@@ -47,20 +47,20 @@ bool conway::game_of_life::cell_change_rule(rule_neighbor_state ruling, bool cur
 {
         switch (ruling) {
                 case rule_neighbor_state::less_than_two:
-                        return false;
+                        return false; // DEAD - lonely :(
                 case rule_neighbor_state::two_or_three:
-                        return (true && curr_state);
+                        return (curr_state); // No change
                 case rule_neighbor_state::three_reprod:
-                        return true;
+                        return true; // DEAD->alive. Alive->alive
                 case rule_neighbor_state::more_than_three:
-                        return false;
+                        return false; // DEAD - overpopulation!
                 default:
-                        std::cerr << "[cell_change_rule] ERROR: Got invalid game_rule\n";
+                        std::cerr << "[game_of_life::cell_change_rule] ERROR: Got invalid game_rule\n";
                         return false;
         }
 }
 
-conway::game_of_life::game_of_life(std::size_t width, std::size_t height)
+conway::game_of_life::game_of_life(int width, int height)
 {
         _game_board.reserve(width * height);
         _width = width;
@@ -87,6 +87,8 @@ void conway::game_of_life::update()
 }
 
 // IS ANIMAL IN CELL (x,y) alive?
+// Outside our "area" everything is dead.
+// TODO: implement changeable boundary conditions?
 bool conway::game_of_life::alive(int x, int y)
 {
         if (x < 0 || y < 0) {
@@ -97,4 +99,9 @@ bool conway::game_of_life::alive(int x, int y)
         }
         auto temp_check = _game_board[coord_to_pos(x, y)];
         return (temp_check == 0) ? false : true;
+}
+
+std::vector<char> conway::game_of_life::get_game_board()
+{
+        return _game_board;
 }
