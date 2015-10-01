@@ -23,7 +23,7 @@ namespace console {
                 WINDOW *_super = nullptr; // not owning pointer.
 
                 bool _has_super = false;
-                unsigned char_to_draw(char ch);
+                char char_to_draw(char ch);
         public:
                 frame(int nr_rows, int nr_cols, int row_0, int col_0);
                 frame(frame &sw, int nr_rows, int nr_cols, int row_0, int col_0);

@@ -111,7 +111,7 @@ std::vector<char> conway::game_of_life::get_game_board()
 void conway::game_of_life::seed()
 {
         std::mt19937 rng_engine;
-        std::uniform_int_distribution<int> dist(0,9);
+        std::uniform_int_distribution<int> dist(0,1);
         for(std::size_t i {0};i<_game_board.size();++i){
                 _game_board[i]=(seed_alive(dist(rng_engine)));
         }

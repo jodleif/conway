@@ -22,7 +22,7 @@ namespace conway {
         public:
                 game();
                 void run();
-                void to_loop(game_of_life* _gol);
+                void to_loop(game_of_life *_gol, frame *_frame);
 
         };
 }

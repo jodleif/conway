@@ -148,7 +148,7 @@ void console::frame::fill_window(const std::vector<char> &to_draw)
         }
 }
 
-unsigned console::frame::char_to_draw(char ch)
+char console::frame::char_to_draw(char ch)
 {
         switch(ch){
                 case 0:
