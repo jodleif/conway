@@ -27,6 +27,9 @@ namespace console {
 
                 int width();
 
+                void clr();
+
+
         };
 }
 

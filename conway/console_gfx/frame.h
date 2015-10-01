@@ -26,7 +26,6 @@ namespace console {
                 unsigned char_to_draw(char ch);
         public:
                 frame(int nr_rows, int nr_cols, int row_0, int col_0);
-
                 frame(frame &sw, int nr_rows, int nr_cols, int row_0, int col_0);
                 ~frame();
 
@@ -37,6 +36,7 @@ namespace console {
                 void center(character &x);
                 void refresh();
                 void move(int col, int row);
+                void clr();
 
                 WINDOW* get_window();
                 WINDOW* get_super();

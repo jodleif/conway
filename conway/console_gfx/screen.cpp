@@ -35,4 +35,9 @@ namespace console {
         {
                 return _width;
         }
+
+        void screen::clr()
+        {
+                clear();
+        }
 }

@@ -1,6 +1,7 @@
 #include "gol.h"
 #include <cassert>
 #include <iostream>
+#include <random>
 
 conway::rule_neighbor_state conway::get_state(int nof)
 {
@@ -62,9 +63,10 @@ bool conway::game_of_life::cell_change_rule(rule_neighbor_state ruling, bool cur
 
 conway::game_of_life::game_of_life(int width, int height)
 {
-        _game_board.reserve(width * height);
+        _game_board = std::vector<char>(static_cast<std::size_t>(width*height),static_cast<char>(0));
         _width = width;
         _height = height;
+        seed(); // "initialize" game board
 }
 
 /*
@@ -79,8 +81,8 @@ void conway::game_of_life::update()
         std::vector<char> next_gen(_game_board);
         for (int i{0}; i < _height; ++i) {
                 for (int j{0}; j < _width; ++j) {
-                        auto next_state_ji = get_neighborstate(j, i);
-                        next_gen[coord_to_pos(j, i)] = cell_change_rule(next_state_ji, alive(j, i));
+                        auto next_state_ji = get_neighborstate(i, j);
+                        next_gen[coord_to_pos(i, j)] = cell_change_rule(next_state_ji, alive(i, j));
                 }
         }
         _game_board = next_gen;
@@ -104,4 +106,31 @@ bool conway::game_of_life::alive(int x, int y)
 std::vector<char> conway::game_of_life::get_game_board()
 {
         return _game_board;
+}
+
+void conway::game_of_life::seed()
+{
+        std::mt19937 rng_engine;
+        std::uniform_int_distribution<int8_t> dist(0,9);
+        for(std::size_t i {0};i<_game_board.size();++i){
+                _game_board[i]=(seed_alive(dist(rng_engine)));
+        }
+}
+
+char conway::game_of_life::seed_alive(int8_t random_value)
+{
+        switch (random_value){
+                case 0:
+                        return 1;
+                default:
+                        return 0;
+        }
+}
+
+void conway::game_of_life::print_gameboard()
+{
+        for(const auto& elem : _game_board){
+                std::cout << static_cast<char>('0'+elem);
+        }
+        std::cout << std::endl;
 }

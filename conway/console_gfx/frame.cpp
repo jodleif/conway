@@ -8,6 +8,7 @@
 
 console::frame::frame(int nr_rows, int nr_cols, int row_0, int col_0)
 {
+        _has_super = false;
         _width = nr_cols;
         _height = nr_rows;
         _col_pos = col_0;
@@ -42,7 +43,7 @@ void console::frame::fill_window_debug()
         for (int y{0}; y < _height; ++y) {
                 for (int x{0}; x < _width; ++x) {
                         auto ch = console::debug_stuff::get_char_based_on_pos(x, y, _width, _height);
-                        mvwaddch(_window, y, x, static_cast<unsigned>(ch));
+                        mvwaddch(_window, y, x, (ch));
                 }
         }
 }
@@ -156,5 +157,14 @@ unsigned console::frame::char_to_draw(char ch)
                         return 'O';
                 default:
                         return 'E';
+        }
+}
+
+void console::frame::clr()
+{
+        for(int y{0};y<_height;++y){
+                for(int x{0};x<_width;++x){
+                        mvwdelch(_window,y,x);
+                }
         }
 }
