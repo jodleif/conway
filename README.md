@@ -7,6 +7,8 @@ cd conway && mkdir build && cd build <br/>
 cmake ../conway <br/>
 make <br/>
 ./conway 
+### Requires
+cmake, ncurses (tested with ncurses6)
 ### Compilers
 Tested with:
 Clang 3.7 and GCC 5.2
