@@ -5,8 +5,6 @@
 #include "game.h"
 #include <thread>
 #include <chrono>
-#include <iostream>
-#include <memory>
 
 
 conway::game::game()
@@ -16,17 +14,15 @@ conway::game::game()
 
 void conway::game::run()
 {
-       screen _screen;
-       auto _frame = std::make_unique<frame>(_screen.height(),_screen.width(),0,0);
-        auto _gol = std::make_unique<game_of_life>(_screen.height(), _screen.width());
-       // _frame.fill_window_debug();
-        int counter {0};
-        while(counter < 10){
-                //std::this_thread::sleep_for(1s);
-                to_loop(_gol.get(), _frame.get());
-                std::this_thread::sleep_for(std::chrono::seconds(3));
+        screen _screen;
+        auto _frame = frame(_screen.height(), _screen.width(), 0, 0);
+        auto _gol = game_of_life(_screen.width(), _screen.height());
+
+        int counter{0};
+        while (counter < 3000) {
+                to_loop(&_gol, &_frame);
+                std::this_thread::sleep_for(std::chrono::milliseconds(33));
                 ++counter;
-                //std::cerr << counter << std::endl;
         }
 }
 

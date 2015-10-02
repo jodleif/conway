@@ -142,8 +142,7 @@ void console::frame::fill_window(const std::vector<char> &bitvector)
         move(0,0);
         for (int y{0}; y < _height; ++y) {
                 for (int x{0}; x < _width; ++x) {
-                        auto ch = to_draw(bitvector[x * y + x]); // <-- to draw.
-                        move(y,x-1);
+                        auto ch = to_draw(bitvector[y*_width + x]); // <-- to draw.
                         wattron(_window,COLOR_PAIR(ch.first));
                         mvwprintw(_window,y,x, "%c",ch.second);//    A
                         wattroff(_window,COLOR_PAIR(ch.first));

@@ -26,7 +26,8 @@ namespace conway {
                 bool cell_change_rule(rule_neighbor_state ruling, bool curr_state);
 
                 void seed(); // Seed game board with random values (dead or alive)
-
+                void gosper_gun_seed();
+                void set(int x, int y, bool val);
                 char seed_alive(int8_t random_value);
 
         public:

@@ -2,6 +2,7 @@
 #include <cassert>
 #include <iostream>
 #include <random>
+#include <chrono>
 
 conway::rule_neighbor_state conway::get_state(int nof)
 {
@@ -26,22 +27,25 @@ conway::rule_neighbor_state conway::get_state(int nof)
 
 conway::rule_neighbor_state conway::game_of_life::get_neighborstate(int x, int y)
 {
-        int alive{0};
+        int nof_alive{0};
         for (int i = y - 1; i <= (y + 1); ++i) {
                 for (int j = x - 1; j <= (x + 1); ++j) {
-                        if (this->alive(i, j) && (i != y && j != x)) {
-                                ++alive;
+                        if (alive(j, i)) {
+                                ++nof_alive;
+                                if(i==y&&x==j){
+                                        --nof_alive; // dont count self.
+                                }
                         }
                 }
         }
-        return conway::get_state(alive);
+        return conway::get_state(nof_alive);
 }
 
 std::size_t conway::game_of_life::coord_to_pos(int x, int y)
 {
         assert(x >= 0 && x < _width);
         assert(y >= 0 && y < _height);
-        return static_cast<std::size_t>(x * y + x);
+        return static_cast<std::size_t>(y*_width + x);
 }
 
 bool conway::game_of_life::cell_change_rule(rule_neighbor_state ruling, bool curr_state)
@@ -63,10 +67,11 @@ bool conway::game_of_life::cell_change_rule(rule_neighbor_state ruling, bool cur
 
 conway::game_of_life::game_of_life(int width, int height)
 {
-        _game_board = std::vector<char>(static_cast<std::size_t>(width*height),static_cast<char>(0));
+        _game_board = std::vector<char>(static_cast<std::size_t>(width * height), static_cast<char>(0));
         _width = width;
         _height = height;
-        seed(); // "initialize" game board
+        //seed(); // "initialize" game board
+        gosper_gun_seed();
 }
 
 /*
@@ -81,7 +86,7 @@ void conway::game_of_life::update()
         std::vector<char> next_gen(_game_board);
         for (int y{0}; y < _height; ++y) {
                 for (int x{0}; x < _width; ++x) {
-                        auto next_state_ji = get_neighborstate(y, x);
+                        auto next_state_ji = get_neighborstate(x, y);
                         next_gen[coord_to_pos(x, y)] = cell_change_rule(next_state_ji, alive(x, y));
                 }
         }
@@ -94,13 +99,15 @@ void conway::game_of_life::update()
 bool conway::game_of_life::alive(int x, int y)
 {
         if (x < 0 || y < 0) {
+                // std::cerr << "OUTSIDE BOUNDS" << x << "," << y << "MAX:" << _width << "," << _height << std::endl;
                 return false;
         }
         if (x >= _width || y >= _height) {
+                // std::cerr << "OUTSIDE BOUNDS" << x << "," << y << "MAX:" << _width << "," << _height << std::endl;
                 return false;
         }
         auto temp_check = _game_board[coord_to_pos(x, y)];
-        return (temp_check == 0) ? false : true;
+        return (temp_check != 0);
 }
 
 std::vector<char> conway::game_of_life::get_game_board()
@@ -110,16 +117,17 @@ std::vector<char> conway::game_of_life::get_game_board()
 
 void conway::game_of_life::seed()
 {
-        std::mt19937 rng_engine;
-        std::uniform_int_distribution<int> dist(0,1);
-        for(std::size_t i {0};i<_game_board.size();++i){
-                _game_board[i]=(seed_alive(dist(rng_engine)));
+        auto sclock_seed = std::chrono::system_clock::now().time_since_epoch().count();
+        std::mt19937 rng_engine(sclock_seed);
+        std::uniform_int_distribution<int> dist(0, 1);
+        for (std::size_t i{0}; i < _game_board.size(); ++i) {
+                _game_board[i] = (seed_alive(dist(rng_engine)));
         }
 }
 
 char conway::game_of_life::seed_alive(int8_t random_value)
 {
-        switch (random_value){
+        switch (random_value) {
                 case 0:
                         return 1;
                 default:
@@ -129,8 +137,64 @@ char conway::game_of_life::seed_alive(int8_t random_value)
 
 void conway::game_of_life::print_gameboard()
 {
-        for(const auto& elem : _game_board){
-                std::cout << static_cast<char>('0'+elem);
+        for (const auto &elem : _game_board) {
+                std::cout << static_cast<char>('0' + elem);
         }
         std::cout << std::endl;
+}
+
+void conway::game_of_life::gosper_gun_seed()
+{
+        if(_height<11)
+                return;
+        if(_width<38)
+                return;
+
+        // GUN 2
+        set(25,1,true);
+        set(25,2,true);
+        set(23,2,true);
+        set(21,3,true);
+        set(22,3,true);
+        set(21,4,true);
+        set(22,4,true);
+        set(21,5,true);
+        set(22,5,true);
+        set(25,6,true);
+        set(25,7,true);
+        set(23,6,true);
+        //GUN 1
+        set(13,3,true);
+        set(14,3,true);
+        set(12,4,true);
+        set(16,4,true);
+        set(11,5,true);
+        set(17,5,true);
+        set(11,6,true);
+        set(18,6,true);
+        set(17,6,true);
+        set(15,6,true);
+        set(11,7,true);
+        set(17,7,true);
+        set(12,8,true);
+        set(16,8,true);
+        set(13,9,true);
+        set(14,9,true);
+        //SQUARE 1
+        set(1,5,true);
+        set(2,5,true);
+        set(1,6,true);
+        set(2,6,true);
+
+        //SQUARE 2
+        set(35,3,true);
+        set(36,3,true);
+        set(35,4,true);
+        set(36,4,true);
+
+}
+
+void conway::game_of_life::set(int x, int y, bool val)
+{
+        _game_board[coord_to_pos(x,y)] = static_cast<char>(val);
 }
