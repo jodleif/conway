@@ -10,7 +10,6 @@
 
 
 namespace console {
-
         typedef struct _win_st WINDOW;
         class frame {
         private:
@@ -25,7 +24,8 @@ namespace console {
                 WINDOW *_super = nullptr; // not owning pointer.
 
                 bool _has_super = false;
-                std::pair<short,char> to_draw(char ch);
+                //std::pair<short,char> to_draw(char ch);
+                unsigned to_draw(char ch);
         public:
                 frame(int nr_rows, int nr_cols, int row_0, int col_0);
                 frame(frame &sw, int nr_rows, int nr_cols, int row_0, int col_0);
@@ -48,6 +48,9 @@ namespace console {
         };
         namespace debug_stuff {
                 char get_char_based_on_pos(int x, int y, int max_x, int max_y);
+        }
+        namespace util {
+                std::size_t coord_to_vecpos(int x, int y, int width);
         }
 }
 

@@ -141,8 +141,8 @@ void console::frame::fill_window(const std::vector<char> &bitvector)
         wattron(_window,COLOR_PAIR(2));
         for (int y{0}; y < _height; ++y) {
                 for (int x{0}; x < _width; ++x) {
-                        auto ch = to_draw(bitvector[y*_width + x]); // <-- to draw.
-                        mvwprintw(_window,y,x, "%c",ch.second);//    A
+                        auto ch = to_draw(bitvector[util::coord_to_vecpos(x,y,_width)]); // <-- to draw.
+                        mvwprintw(_window,y,x, "%c",ch);//    A
                         //                    mvwaddch(_window, y, x, ch.second);
                 }
         }
@@ -150,15 +150,18 @@ void console::frame::fill_window(const std::vector<char> &bitvector)
         wattroff(_window,COLOR_PAIR(2));
 }
 
-std::pair<short, char> console::frame::to_draw(char ch)
+unsigned console::frame::to_draw(char ch)
 {
         switch(ch){
                 case 0:
-                        return {1,' '};
+                        return ' ';
                 case 1:
-                        return {2,'O'}; //COLOR green (see screen.cpp)
+                        return 'O'; //COLOR green (see screen.cpp)
                 default:
-                        return {0,'E'};
+                        return 'E';
         }
 }
 
+std::size_t console::util::coord_to_vecpos(int x, int y, int width) {
+        return static_cast<std::size_t> (y*width+x);
+}
