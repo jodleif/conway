@@ -70,8 +70,8 @@ conway::game_of_life::game_of_life(int width, int height)
         _game_board = std::vector<char>(static_cast<std::size_t>(width * height), static_cast<char>(0));
         _width = width;
         _height = height;
-        //seed(); // "initialize" game board
-        gosper_gun_seed();
+        seed(); // "initialize" game board
+  //        gosper_gun_seed();
 }
 
 /*
@@ -119,7 +119,7 @@ void conway::game_of_life::seed()
 {
         auto sclock_seed = std::chrono::system_clock::now().time_since_epoch().count();
         std::mt19937 rng_engine(sclock_seed);
-        std::uniform_int_distribution<int> dist(0, 1);
+        std::uniform_int_distribution<int> dist(0, 2);
         for (std::size_t i{0}; i < _game_board.size(); ++i) {
                 _game_board[i] = (seed_alive(dist(rng_engine)));
         }

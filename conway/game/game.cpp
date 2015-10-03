@@ -14,7 +14,7 @@ conway::game::game()
 
 void conway::game::run()
 {
-        screen _screen;
+        screen _screen; // initialize ncurses. Destructor of this closes ncurses.
         auto _frame = frame(_screen.height(), _screen.width(), 0, 0);
         auto _gol = game_of_life(_screen.width(), _screen.height());
 

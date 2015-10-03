@@ -7,10 +7,11 @@
 #include <cstdint>
 #include <vector>
 #include <utility>
-#include <curses.h>
-#include "character.h"
+
 
 namespace console {
+
+        typedef struct _win_st WINDOW;
         class frame {
         private:
                 int _height;
@@ -32,9 +33,8 @@ namespace console {
 
                 void fill_window_debug();
                 void fill_window(const std::vector<char> &bitvector);
-                void add(character &x);
-                void erase(character &x);
-                void center(character &x);
+                void add(int x, int y, char to_draw);
+                void erase(int x, int y);
                 void refresh();
                 void move(int col, int row);
 

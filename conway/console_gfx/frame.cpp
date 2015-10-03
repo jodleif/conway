@@ -4,6 +4,8 @@
 
 #include <exception>
 #include <iostream>
+
+#include <curses.h>
 #include "frame.h"
 
 console::frame::frame(int nr_rows, int nr_cols, int row_0, int col_0)
@@ -48,14 +50,9 @@ void console::frame::fill_window_debug()
         }
 }
 
-void console::frame::add(console::character &x)
+void console::frame::add(int x, int y, char to_draw)
 {
-        mvwaddch(_window, x.row(), x.col(), x.symbol());
-}
-
-void console::frame::center(console::character &x)
-{
-        // TODO: add if needed...
+        mvwaddch(_window, y, x, to_draw);
 }
 
 WINDOW *console::frame::get_window()
@@ -63,9 +60,9 @@ WINDOW *console::frame::get_window()
         return _window;
 }
 
-void console::frame::erase(console::character &x)
+void console::frame::erase(int x, int y)
 {
-        mvwaddch(_window, x.row(), x.col(), ' ');
+        mvwaddch(_window, y, x, ' ');
 }
 
 void console::frame::refresh()
@@ -140,23 +137,24 @@ void console::frame::fill_window(const std::vector<char> &bitvector)
         }
 
         move(0,0);
+
+        wattron(_window,COLOR_PAIR(2));
         for (int y{0}; y < _height; ++y) {
                 for (int x{0}; x < _width; ++x) {
                         auto ch = to_draw(bitvector[y*_width + x]); // <-- to draw.
-                        wattron(_window,COLOR_PAIR(ch.first));
                         mvwprintw(_window,y,x, "%c",ch.second);//    A
-                        wattroff(_window,COLOR_PAIR(ch.first));
                         //                    mvwaddch(_window, y, x, ch.second);
                 }
         }
 
+        wattroff(_window,COLOR_PAIR(2));
 }
 
 std::pair<short, char> console::frame::to_draw(char ch)
 {
         switch(ch){
                 case 0:
-                        return {1,'X'};
+                        return {1,' '};
                 case 1:
                         return {2,'O'}; //COLOR green (see screen.cpp)
                 default:

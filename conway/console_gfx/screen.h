@@ -7,7 +7,6 @@
 
 #include <cstdint>
 #include <string>
-#include <curses.h>
 /*
  * This class initializes ncurses and gives info about the terminal
  */

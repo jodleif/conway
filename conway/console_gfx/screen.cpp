@@ -3,7 +3,10 @@
 //
 
 #include "screen.h"
+
+#include <curses.h>
 namespace console {
+
         screen::screen()
         {
                 initscr();
@@ -15,8 +18,8 @@ namespace console {
                 curs_set(0);
                 getmaxyx(stdscr, _height, _width);
                 // Colors
-                init_pair(1,COLOR_RED,COLOR_BLACK);
-                init_pair(2,COLOR_GREEN,COLOR_BLACK);
+                init_pair(1,COLOR_RED,COLOR_WHITE);
+                init_pair(2,COLOR_GREEN,COLOR_WHITE);
         }
 
         // Clear ncurses
