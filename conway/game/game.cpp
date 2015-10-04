@@ -7,28 +7,31 @@
 #include <chrono>
 
 
-conway::game::game()
+conway::game::game() : _frame(4,4,0,0), _gol(4,4)
+{
+
+//        _frame = console::frame(_screen.height(), _screen.width(), 0, 0);
+ //       _gol = game_of_life(_screen.width(), _screen.height());
+}
+
+conway::game::game(int x, int y) : _frame(y,x,0,0), _gol(x,y)
 {
 
 }
-
 void conway::game::run()
 {
-        screen _screen; // initialize ncurses. Destructor of this closes ncurses.
-        auto _frame = frame(_screen.height(), _screen.width(), 0, 0);
-        auto _gol = game_of_life(_screen.width(), _screen.height());
 
         int counter{0};
-        while (counter < 3000) {
-                to_loop(&_gol, &_frame);
-                std::this_thread::sleep_for(std::chrono::milliseconds(33));
+        while (counter < 600) {
+                to_loop();
+                std::this_thread::sleep_for(std::chrono::milliseconds(166));
                 ++counter;
         }
 }
 
-void conway::game::to_loop(game_of_life *_gol, frame *_frame)
+void conway::game::to_loop()
 {
-        (*_frame).fill_window((*_gol).get_game_board());
-        (*_frame).refresh();
-        _gol->update();
+        _frame.fill_window(_gol.get_game_board());
+        _frame.refresh();
+        _gol.update();
 }

@@ -31,7 +31,8 @@ console::frame::frame(console::frame &sw, int nr_rows, int nr_cols, int row_0, i
 
 console::frame::~frame()
 {
-        delwin(_window);
+        if(_window!=nullptr)
+                delwin(_window);
 }
 
 /*
@@ -112,21 +113,7 @@ int console::frame::get_col_pos()
         return _col_pos;
 }
 
-char ::console::debug_stuff::get_char_based_on_pos(int x, int y, int max_x, int max_y)
-{
 
-        if (x < max_x / 2) {
-                if (y < max_y / 2) {
-                        return '0';
-                }
-                return '2';
-        } else {
-                if (y < max_y / 2) {
-                        return '1';
-                }
-                return '3';
-        }
-}
 
 void console::frame::fill_window(const std::vector<char> &bitvector)
 {
@@ -142,8 +129,7 @@ void console::frame::fill_window(const std::vector<char> &bitvector)
         for (int y{0}; y < _height; ++y) {
                 for (int x{0}; x < _width; ++x) {
                         auto ch = to_draw(bitvector[util::coord_to_vecpos(x,y,_width)]); // <-- to draw.
-                        mvwprintw(_window,y,x, "%c",ch);//    A
-                        //                    mvwaddch(_window, y, x, ch.second);
+                        mvwaddch(_window,y,x,ch);
                 }
         }
 
@@ -156,7 +142,7 @@ unsigned console::frame::to_draw(char ch)
                 case 0:
                         return ' ';
                 case 1:
-                        return 'O'; //COLOR green (see screen.cpp)
+                        return 'O';
                 default:
                         return 'E';
         }
@@ -164,4 +150,20 @@ unsigned console::frame::to_draw(char ch)
 
 std::size_t console::util::coord_to_vecpos(int x, int y, int width) {
         return static_cast<std::size_t> (y*width+x);
+}
+// For fill_window_debug
+char ::console::debug_stuff::get_char_based_on_pos(int x, int y, int max_x, int max_y)
+{
+
+        if (x < max_x / 2) {
+                if (y < max_y / 2) {
+                        return '0';
+                }
+                return '2';
+        } else {
+                if (y < max_y / 2) {
+                        return '1';
+                }
+                return '3';
+        }
 }

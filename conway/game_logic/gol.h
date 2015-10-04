@@ -25,21 +25,17 @@ namespace conway {
 
                 bool cell_change_rule(rule_neighbor_state ruling, bool curr_state);
 
-                void seed(); // Seed game board with random values (dead or alive)
-                void gosper_gun_seed();
                 void set(int x, int y, bool val);
                 char seed_alive(int8_t random_value);
+		//Seeding functions
+                void seed(); // Seed game board with random values (dead or alive)
+                void gosper_gun_seed();
 
         public:
                 game_of_life(int width, int height);
-
-
                 void update();
-
                 std::vector<char> get_game_board();
-
                 bool alive(int x, int y);
-
                 void print_gameboard();
                 auto get_width()
                 {

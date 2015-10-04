@@ -1,9 +1,10 @@
-#include <iostream>
 #include "game/game.h"
+#include "console_gfx/screen.h"
+
 int main()
 {
-        conway::game gam;
+	console::screen scr;
+        conway::game gam(scr.width(), scr.height());
         gam.run();
-        std::cout << "DONE1\n";
         return 0;
 }
