@@ -28,8 +28,6 @@ namespace conway {
                 void set(int x, int y, bool val);
                 char seed_alive(int8_t random_value);
 		//Seeding functions
-                void seed(); // Seed game board with random values (dead or alive)
-                void gosper_gun_seed();
 
         public:
                 game_of_life(int width, int height);
@@ -37,15 +35,11 @@ namespace conway {
                 std::vector<char> get_game_board();
                 bool alive(int x, int y);
                 void print_gameboard();
-                auto get_width()
-                {
-                        return _height;
-                }
-
-                auto get_height()
-                {
-                        return _width;
-                }
+                int get_width();
+                int get_height();
+                void reset_board();
+                void seed(); // Seed game board with random values (dead or alive)
+                void gosper_gun_seed();
         };
 
 }
